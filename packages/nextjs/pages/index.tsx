@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { Abi, decodeEventLog, formatEther, formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { useDeployedContractInfo, useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
@@ -97,16 +98,60 @@ const Home: NextPage = () => {
           placeholder="Paste data here"
         ></textarea>
         <span className="badge badge-lg m-4 badge-outline">{bytes} bytes of data</span>
-        <div className="row">
-          <button className="btn m-2" onClick={() => emitEventData({})} disabled={!data}>
-            Publish as event data
-          </button>
-          <button className="btn m-2" onClick={() => writeContractData({})} disabled={!data}>
-            Publish as contract data
-          </button>
-          <button className="btn m-2" onClick={() => writeSeparateContractData({})} disabled={!data}>
-            Publish as separate contract
-          </button>
+        <div className="grid grid-flow-col gap-4 w-5/6">
+          <div className="grid gap-2 place-self-start">
+            <button className="btn" onClick={() => emitEventData({})} disabled={!data}>
+              Publish as event data
+            </button>
+            <div tabIndex={0} className="border border-base-300 bg-base-100 rounded-box">
+              <div className="text-xl font-medium flex row items-center">
+                <InformationCircleIcon className="h-6 w-6 m-3" /> Why would I use this?
+              </div>
+              <div className="px-2">
+                <p>
+                  This is by far the cheapest option when it comes to putting data onchain. The big caveat is that event
+                  data can not be used from within the chain. No composability is possible. This is an ideal storage
+                  place for any data that you do not need to change but you do want to protect from censorship.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="grid gap-2 place-self-start">
+            <button className="btn" onClick={() => writeContractData({})} disabled={!data}>
+              Publish as contract data
+            </button>
+            <div tabIndex={0} className="border border-base-300 bg-base-100 rounded-box">
+              <div className="text-xl font-medium flex row items-center">
+                <InformationCircleIcon className="h-6 w-6 m-3" /> Why would I use this?
+              </div>
+              <div className="px-2">
+                <p>
+                  This is not cheap but it is ideal for any data that needs some composability. For instance, a SVG NFT
+                  project that builds the asset from stored SVG fragments each time the URI is requested would need to
+                  store the data in this or the next way.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="grid gap-2 place-self-start">
+            <button className="btn" onClick={() => writeSeparateContractData({})} disabled={!data}>
+              Publish as separate contract
+            </button>
+            <div tabIndex={0} className="border border-base-300 bg-base-100 rounded-box">
+              <div className="text-xl font-medium flex row items-center">
+                <InformationCircleIcon className="h-6 w-6 m-3" />
+                <span>Why would I use this?</span>
+              </div>
+              <div className="px-2">
+                <p>
+                  Storing content in it&apos;s own contract is generally the most expensive solution listed here but it
+                  comes with a few extra benefits on top of all the benefits listed in the last method. You can deploy
+                  the contract with whatever logic you need to shape the data while also being careful not to exceed
+                  constraints based on gas limits. This is the most composable way of storign data.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {loadingEmitEvent || loadingContractData || loadingSeparateContractData ? (

@@ -1,4 +1,7 @@
-# 🏗 Scaffold-ETH 2
+# 🏗 An experiment in storing bulk data onchain
+Follow the steps listed below to view the site and play around with costs of storing data in various ways onchain.
+
+# Built useing Scaffold-ETH-2:
 
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
